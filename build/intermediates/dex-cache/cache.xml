@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\Public\Documents\and\Proje1AndroidCalculator\app\libs\cern-jet.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="2f9abd6ec500609fba4d21c5311531d7eb7afbe3">
+        <dex dex="C:\Users\Public\Documents\and\Proje1AndroidCalculator\app\build\intermediates\transforms\dex\debug\folders\1000\2\cern-jet_67162c4cfa1fd3392493198875477a65a372d152\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Public\Documents\and\Proje1AndroidCalculator\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="a623036bc00c276f54db8a5368cc975e1d79a222">
+        <dex dex="C:\Users\Public\Documents\and\Proje1AndroidCalculator\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_795072530394a0cc5b02aca765fd1dfd9c4dc6a3\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Public\Documents\and\Proje1AndroidCalculator\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="333ab5b0dc3c22e14b890957986ac641f72edccb">
+        <dex dex="C:\Users\Public\Documents\and\Proje1AndroidCalculator\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_93654f1cef910ba9d49c138529f73b327e70b2ef\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Public\Documents\and\Proje1AndroidCalculator\app\libs\antlr-runtime.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="ee2d595711da4f219de39ec327166189f8489778">
+        <dex dex="C:\Users\Public\Documents\and\Proje1AndroidCalculator\app\build\intermediates\transforms\dex\debug\folders\1000\2\antlr-runtime_bdc7ae4aca46bf7c0a74c3bf7305894964ea5a40\classes.dex" />
+    </item>
+
+</items>

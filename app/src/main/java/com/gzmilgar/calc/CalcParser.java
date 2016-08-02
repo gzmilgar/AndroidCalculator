@@ -1,0 +1,813 @@
+ package com.gzmilgar.calc;
+
+import org.antlr.runtime.*;
+import java.util.Stack;
+import java.util.List;
+import java.util.ArrayList;
+
+public class CalcParser extends Parser {
+    public static final String[] tokenNames = new String[] {
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "PLUS", "MINUS", "MULT", "DIV", "LPAREN", "RPAREN", "SIN", "COS", "TAN", "LN", "LOG", "FACT", "POWER", "E", "PI", "SQRT", "DECIMALPOINT", "DIGIT", "DECIMAL", "WHITESPACE"
+    };
+    public static final int E=17;
+    public static final int LN=13;
+    public static final int LOG=14;
+    public static final int WHITESPACE=23;
+    public static final int POWER=16;
+    public static final int MULT=6;
+    public static final int MINUS=5;
+    public static final int SQRT=19;
+    public static final int EOF=-1;
+    public static final int LPAREN=8;
+    public static final int RPAREN=9;
+    public static final int DECIMAL=22;
+    public static final int SIN=10;
+    public static final int COS=11;
+    public static final int TAN=12;
+    public static final int PLUS=4;
+    public static final int PI=18;
+    public static final int DIGIT=21;
+    public static final int DIV=7;
+    public static final int DECIMALPOINT=20;
+    public static final int FACT=15;
+
+
+        public CalcParser(TokenStream input) {
+            this(input, new RecognizerSharedState());
+        }
+        public CalcParser(TokenStream input, RecognizerSharedState state) {
+            super(input, state);
+             
+        }
+        
+
+    public String[] getTokenNames() { return CalcParser.tokenNames; }
+    public String getGrammarFileName() { return "CalcParser.g"; }
+
+    private final int trigRound = 15;
+    public String result;
+
+
+     public final void ultimate() throws RecognitionException {
+        double expr1 = 0.0;
+
+
+        try {
+            {
+            pushFollow(FOLLOW_expr_in_ultimate33);
+            expr1=expr();
+
+            state._fsp--;
+
+            result = Helper.doubleFormatted(expr1);
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+        }
+        return ;
+    }
+
+
+     public final double expr() throws RecognitionException {
+        double value = 0.0;
+
+        double a = 0.0;
+
+        double b = 0.0;
+
+
+        try {
+            {
+            pushFollow(FOLLOW_multExpr_in_expr52);
+            a=multExpr();
+
+            state._fsp--;
+
+            value = a;
+            loop1:
+            do {
+                int alt1=3;
+                int LA1_0 = input.LA(1);
+
+                if ( (LA1_0==PLUS) ) {
+                    alt1=1;
+                }
+                else if ( (LA1_0==MINUS) ) {
+                    alt1=2;
+                }
+
+
+                switch (alt1) {
+            	case 1 :
+            	     {
+            	    match(input,PLUS,FOLLOW_PLUS_in_expr59); 
+            	    pushFollow(FOLLOW_multExpr_in_expr65);
+            	    b=multExpr();
+
+            	    state._fsp--;
+
+            	    value += b;
+
+            	    }
+            	    break;
+            	case 2 :
+            	    {
+            	    match(input,MINUS,FOLLOW_MINUS_in_expr72); 
+            	    pushFollow(FOLLOW_multExpr_in_expr78);
+            	    b=multExpr();
+
+            	    state._fsp--;
+
+            	    value -= b;
+
+            	    }
+            	    break;
+
+            	default :
+            	    break loop1;
+                }
+            } while (true);
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+        }
+        return value;
+    }
+
+     public final double multExpr() throws RecognitionException {
+        double value = 0.0;
+
+        double a = 0.0;
+
+        double b = 0.0;
+
+
+        try {
+             {
+            pushFollow(FOLLOW_powExpr_in_multExpr98);
+            a=powExpr();
+
+            state._fsp--;
+
+            value = a;
+
+            loop2:
+            do {
+                int alt2=3;
+                int LA2_0 = input.LA(1);
+
+                if ( (LA2_0==MULT) ) {
+                    alt2=1;
+                }
+                else if ( (LA2_0==DIV) ) {
+                    alt2=2;
+                }
+
+
+                switch (alt2) {
+            	case 1 :
+            	    {
+            	    match(input,MULT,FOLLOW_MULT_in_multExpr105); 
+            	    pushFollow(FOLLOW_powExpr_in_multExpr111);
+            	    b=powExpr();
+
+            	    state._fsp--;
+
+            	    value *= b;
+
+            	    }
+            	    break;
+            	case 2 :
+            	    {
+            	    match(input,DIV,FOLLOW_DIV_in_multExpr118); 
+            	    pushFollow(FOLLOW_powExpr_in_multExpr126);
+            	    b=powExpr();
+
+            	    state._fsp--;
+
+            	    value /= b;
+
+            	    }
+            	    break;
+
+            	default :
+            	    break loop2;
+                }
+            } while (true);
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+        }
+        return value;
+    }
+      public final double powExpr() throws RecognitionException {
+        double value = 0.0;
+
+        double a = 0.0;
+
+        double b = 0.0;
+
+
+        try {
+            {
+            pushFollow(FOLLOW_minusExpr_in_powExpr146);
+            a=minusExpr();
+
+            state._fsp--;
+
+            value = a;
+             int alt3=2;
+            int LA3_0 = input.LA(1);
+
+            if ( (LA3_0==POWER) ) {
+                alt3=1;
+            }
+            switch (alt3) {
+                case 1 :
+                    {
+                    match(input,POWER,FOLLOW_POWER_in_powExpr153); 
+                    pushFollow(FOLLOW_minusExpr_in_powExpr159);
+                    b=minusExpr();
+
+                    state._fsp--;
+
+                    value = Math.pow(a, b);
+
+                    }
+                    break;
+
+            }
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+        }
+        return value;
+    }
+    public final double minusExpr() throws RecognitionException {
+        double value = 0.0;
+
+        Token min=null;
+        List list_min=null;
+        double multTerms2 = 0.0;
+
+        double multTerms3 = 0.0;
+
+
+        try {
+             int alt5=2;
+            int LA5_0 = input.LA(1);
+
+            if ( (LA5_0==MINUS) ) {
+                alt5=1;
+            }
+            else if ( (LA5_0==LPAREN||(LA5_0>=SIN && LA5_0<=LOG)||(LA5_0>=E && LA5_0<=SQRT)||LA5_0==DECIMAL) ) {
+                alt5=2;
+            }
+            else {
+                NoViableAltException nvae =
+                    new NoViableAltException("", 5, 0, input);
+
+                throw nvae;
+            }
+            switch (alt5) {
+                case 1 :
+                    {
+                     int cnt4=0;
+                    loop4:
+                    do {
+                        int alt4=2;
+                        int LA4_0 = input.LA(1);
+
+                        if ( (LA4_0==MINUS) ) {
+                            alt4=1;
+                        }
+
+
+                        switch (alt4) {
+                    	case 1 :
+                    	    {
+                    	    min=(Token)match(input,MINUS,FOLLOW_MINUS_in_minusExpr179); 
+                    	    if (list_min==null) list_min=new ArrayList();
+                    	    list_min.add(min);
+
+
+                    	    }
+                    	    break;
+
+                    	default :
+                    	    if ( cnt4 >= 1 ) break loop4;
+                                EarlyExitException eee =
+                                    new EarlyExitException(4, input);
+                                throw eee;
+                        }
+                        cnt4++;
+                    } while (true);
+
+                    pushFollow(FOLLOW_multTerms_in_minusExpr183);
+                    multTerms2=multTerms();
+
+                    state._fsp--;
+
+                    if (list_min != null)
+                    {
+                    	int negOrPos = (list_min.size() % 2 == 0) ? 1 : -1;
+                    	value = multTerms2 * negOrPos;
+                    }
+
+                    }
+                    break;
+                case 2 :
+                    {
+                    pushFollow(FOLLOW_multTerms_in_minusExpr190);
+                    multTerms3=multTerms();
+
+                    state._fsp--;
+
+                    value = multTerms3;
+
+                    }
+                    break;
+
+            }
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+        }
+        return value;
+    }
+     public final double multTerms() throws RecognitionException {
+        double value = 0.0;
+
+        double unaryExpr4 = 0.0;
+
+
+        ArrayList<Double> termList = new ArrayList<Double>();
+        try {
+            {
+            int cnt6=0;
+            loop6:
+            do {
+                int alt6=2;
+                int LA6_0 = input.LA(1);
+
+                if ( (LA6_0==LPAREN||(LA6_0>=SIN && LA6_0<=LOG)||(LA6_0>=E && LA6_0<=SQRT)||LA6_0==DECIMAL) ) {
+                    alt6=1;
+                }
+
+
+                switch (alt6) {
+            	case 1 :
+            	    {
+            	    pushFollow(FOLLOW_unaryExpr_in_multTerms218);
+            	    unaryExpr4=unaryExpr();
+
+            	    state._fsp--;
+
+            	    termList.add(new Double(unaryExpr4));
+
+            	    }
+            	    break;
+
+            	default :
+            	    if ( cnt6 >= 1 ) break loop6;
+                        EarlyExitException eee =
+                            new EarlyExitException(6, input);
+                        throw eee;
+                }
+                cnt6++;
+            } while (true);
+
+            value = Helper.multiplyList(termList);
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+        }
+        return value;
+    }
+    public final double unaryExpr() throws RecognitionException {
+        double value = 0.0;
+
+        Token sqrt=null;
+        List list_sqrt=null;
+        double factExpr5 = 0.0;
+
+        double factExpr6 = 0.0;
+
+
+        try {
+            int alt8=2;
+            int LA8_0 = input.LA(1);
+
+            if ( (LA8_0==SQRT) ) {
+                alt8=1;
+            }
+            else if ( (LA8_0==LPAREN||(LA8_0>=SIN && LA8_0<=LOG)||(LA8_0>=E && LA8_0<=PI)||LA8_0==DECIMAL) ) {
+                alt8=2;
+            }
+            else {
+                NoViableAltException nvae =
+                    new NoViableAltException("", 8, 0, input);
+
+                throw nvae;
+            }
+            switch (alt8) {
+                case 1 :
+                     {
+                    int cnt7=0;
+                    loop7:
+                    do {
+                        int alt7=2;
+                        int LA7_0 = input.LA(1);
+
+                        if ( (LA7_0==SQRT) ) {
+                            alt7=1;
+                        }
+
+
+                        switch (alt7) {
+                    	case 1 :
+                    	    {
+                    	    sqrt=(Token)match(input,SQRT,FOLLOW_SQRT_in_unaryExpr251); 
+                    	    if (list_sqrt==null) list_sqrt=new ArrayList();
+                    	    list_sqrt.add(sqrt);
+
+
+                    	    }
+                    	    break;
+
+                    	default :
+                    	    if ( cnt7 >= 1 ) break loop7;
+                                EarlyExitException eee =
+                                    new EarlyExitException(7, input);
+                                throw eee;
+                        }
+                        cnt7++;
+                    } while (true);
+
+                    pushFollow(FOLLOW_factExpr_in_unaryExpr255);
+                    factExpr5=factExpr();
+
+                    state._fsp--;
+
+                    value = Helper.squareRoot(factExpr5, list_sqrt.size());
+
+                    }
+                    break;
+                case 2 :
+                    {
+                    pushFollow(FOLLOW_factExpr_in_unaryExpr261);
+                    factExpr6=factExpr();
+
+                    state._fsp--;
+
+                    value = factExpr6;
+
+                    }
+                    break;
+
+            }
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+        }
+        return value;
+    }
+    public final double factExpr() throws RecognitionException {
+        double value = 0.0;
+
+        Token fact=null;
+        List list_fact=null;
+        double term7 = 0.0;
+
+
+        try {
+             {
+            pushFollow(FOLLOW_term_in_factExpr278);
+            term7=term();
+
+            state._fsp--;
+
+            loop9:
+            do {
+                int alt9=2;
+                int LA9_0 = input.LA(1);
+
+                if ( (LA9_0==FACT) ) {
+                    alt9=1;
+                }
+
+
+                switch (alt9) {
+            	case 1 :
+            	    {
+            	    fact=(Token)match(input,FACT,FOLLOW_FACT_in_factExpr285); 
+            	    if (list_fact==null) list_fact=new ArrayList();
+            	    list_fact.add(fact);
+
+
+            	    }
+            	    break;
+
+            	default :
+            	    break loop9;
+                }
+            } while (true);
+
+            if (list_fact == null)
+            	value = term7;
+            else
+            	value = Helper.factorial(term7, list_fact.size());
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+        }
+        return value;
+    }
+   public final double term() throws RecognitionException {
+        double value = 0.0;
+
+        Token DECIMAL14=null;
+        double expr8 = 0.0;
+
+        double expr9 = 0.0;
+
+        double expr10 = 0.0;
+
+        double expr11 = 0.0;
+
+        double expr12 = 0.0;
+
+        double expr13 = 0.0;
+
+
+        try {
+            int alt10=9;
+            switch ( input.LA(1) ) {
+            case LPAREN:
+                {
+                alt10=1;
+                }
+                break;
+            case LN:
+                {
+                alt10=2;
+                }
+                break;
+            case LOG:
+                {
+                alt10=3;
+                }
+                break;
+            case SIN:
+                {
+                alt10=4;
+                }
+                break;
+            case COS:
+                {
+                alt10=5;
+                }
+                break;
+            case TAN:
+                {
+                alt10=6;
+                }
+                break;
+            case DECIMAL:
+                {
+                alt10=7;
+                }
+                break;
+            case PI:
+                {
+                alt10=8;
+                }
+                break;
+            case E:
+                {
+                alt10=9;
+                }
+                break;
+            default:
+                NoViableAltException nvae =
+                    new NoViableAltException("", 10, 0, input);
+
+                throw nvae;
+            }
+
+            switch (alt10) {
+                case 1 :
+                    {
+                    match(input,LPAREN,FOLLOW_LPAREN_in_term301); 
+                    pushFollow(FOLLOW_expr_in_term303);
+                    expr8=expr();
+
+                    state._fsp--;
+
+                    match(input,RPAREN,FOLLOW_RPAREN_in_term305); 
+                    value = expr8;
+
+                    }
+                    break;
+                case 2 :
+                    {
+                    match(input,LN,FOLLOW_LN_in_term311); 
+                    match(input,LPAREN,FOLLOW_LPAREN_in_term313); 
+                    pushFollow(FOLLOW_expr_in_term315);
+                    expr9=expr();
+
+                    state._fsp--;
+
+                    match(input,RPAREN,FOLLOW_RPAREN_in_term317); 
+                    value = Math.log(expr9);
+
+                    }
+                    break;
+                case 3 :
+                    {
+                    match(input,LOG,FOLLOW_LOG_in_term323); 
+                    match(input,LPAREN,FOLLOW_LPAREN_in_term325); 
+                    pushFollow(FOLLOW_expr_in_term327);
+                    expr10=expr();
+
+                    state._fsp--;
+
+                    match(input,RPAREN,FOLLOW_RPAREN_in_term329); 
+                    value = Math.log10(expr10);
+
+                    }
+                    break;
+                case 4 :
+                    {
+                    match(input,SIN,FOLLOW_SIN_in_term334); 
+                    match(input,LPAREN,FOLLOW_LPAREN_in_term336); 
+                    pushFollow(FOLLOW_expr_in_term338);
+                    expr11=expr();
+
+                    state._fsp--;
+
+                    match(input,RPAREN,FOLLOW_RPAREN_in_term340); 
+                    value = Helper.round(Math.sin(expr11), trigRound);
+
+                    }
+                    break;
+                case 5 :
+                    {
+                    match(input,COS,FOLLOW_COS_in_term345); 
+                    match(input,LPAREN,FOLLOW_LPAREN_in_term347); 
+                    pushFollow(FOLLOW_expr_in_term349);
+                    expr12=expr();
+
+                    state._fsp--;
+
+                    match(input,RPAREN,FOLLOW_RPAREN_in_term351); 
+                    value = Helper.round(Math.cos(expr12), trigRound);
+
+                    }
+                    break;
+                case 6 :
+                    {
+                    match(input,TAN,FOLLOW_TAN_in_term356); 
+                    match(input,LPAREN,FOLLOW_LPAREN_in_term358); 
+                    pushFollow(FOLLOW_expr_in_term360);
+                    expr13=expr();
+
+                    state._fsp--;
+
+                    match(input,RPAREN,FOLLOW_RPAREN_in_term362); 
+                    value = Helper.round(Math.tan(expr13), trigRound);
+
+                    }
+                    break;
+                case 7 :
+                    {
+                    DECIMAL14=(Token)match(input,DECIMAL,FOLLOW_DECIMAL_in_term367); 
+                    value = Helper.DecimalToDouble((DECIMAL14!=null?DECIMAL14.getText():null));
+
+                    }
+                    break;
+                case 8 :
+                    {
+                    match(input,PI,FOLLOW_PI_in_term376); 
+                    value = Math.PI;
+
+                    }
+                    break;
+                case 9 :
+                    {
+                    match(input,E,FOLLOW_E_in_term386); 
+                    value = Math.E;
+
+                    }
+                    break;
+
+            }
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+        }
+        return value;
+    }
+
+
+ 
+
+    public static final BitSet FOLLOW_expr_in_ultimate33 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_multExpr_in_expr52 = new BitSet(new long[]{0x0000000000000032L});
+    public static final BitSet FOLLOW_PLUS_in_expr59 = new BitSet(new long[]{0x00000000004E7D20L});
+    public static final BitSet FOLLOW_multExpr_in_expr65 = new BitSet(new long[]{0x0000000000000032L});
+    public static final BitSet FOLLOW_MINUS_in_expr72 = new BitSet(new long[]{0x00000000004E7D20L});
+    public static final BitSet FOLLOW_multExpr_in_expr78 = new BitSet(new long[]{0x0000000000000032L});
+    public static final BitSet FOLLOW_powExpr_in_multExpr98 = new BitSet(new long[]{0x00000000000000C2L});
+    public static final BitSet FOLLOW_MULT_in_multExpr105 = new BitSet(new long[]{0x00000000004E7D20L});
+    public static final BitSet FOLLOW_powExpr_in_multExpr111 = new BitSet(new long[]{0x00000000000000C2L});
+    public static final BitSet FOLLOW_DIV_in_multExpr118 = new BitSet(new long[]{0x00000000004E7D20L});
+    public static final BitSet FOLLOW_powExpr_in_multExpr126 = new BitSet(new long[]{0x00000000000000C2L});
+    public static final BitSet FOLLOW_minusExpr_in_powExpr146 = new BitSet(new long[]{0x0000000000010002L});
+    public static final BitSet FOLLOW_POWER_in_powExpr153 = new BitSet(new long[]{0x00000000004E7D20L});
+    public static final BitSet FOLLOW_minusExpr_in_powExpr159 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_MINUS_in_minusExpr179 = new BitSet(new long[]{0x00000000004E7D20L});
+    public static final BitSet FOLLOW_multTerms_in_minusExpr183 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_multTerms_in_minusExpr190 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_unaryExpr_in_multTerms218 = new BitSet(new long[]{0x00000000004E7D22L});
+    public static final BitSet FOLLOW_SQRT_in_unaryExpr251 = new BitSet(new long[]{0x00000000004E7D20L});
+    public static final BitSet FOLLOW_factExpr_in_unaryExpr255 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_factExpr_in_unaryExpr261 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_term_in_factExpr278 = new BitSet(new long[]{0x0000000000008002L});
+    public static final BitSet FOLLOW_FACT_in_factExpr285 = new BitSet(new long[]{0x0000000000008002L});
+    public static final BitSet FOLLOW_LPAREN_in_term301 = new BitSet(new long[]{0x00000000004E7D20L});
+    public static final BitSet FOLLOW_expr_in_term303 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_RPAREN_in_term305 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LN_in_term311 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_LPAREN_in_term313 = new BitSet(new long[]{0x00000000004E7D20L});
+    public static final BitSet FOLLOW_expr_in_term315 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_RPAREN_in_term317 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LOG_in_term323 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_LPAREN_in_term325 = new BitSet(new long[]{0x00000000004E7D20L});
+    public static final BitSet FOLLOW_expr_in_term327 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_RPAREN_in_term329 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_SIN_in_term334 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_LPAREN_in_term336 = new BitSet(new long[]{0x00000000004E7D20L});
+    public static final BitSet FOLLOW_expr_in_term338 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_RPAREN_in_term340 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_COS_in_term345 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_LPAREN_in_term347 = new BitSet(new long[]{0x00000000004E7D20L});
+    public static final BitSet FOLLOW_expr_in_term349 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_RPAREN_in_term351 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_TAN_in_term356 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_LPAREN_in_term358 = new BitSet(new long[]{0x00000000004E7D20L});
+    public static final BitSet FOLLOW_expr_in_term360 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_RPAREN_in_term362 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_DECIMAL_in_term367 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_PI_in_term376 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_E_in_term386 = new BitSet(new long[]{0x0000000000000002L});
+
+}
